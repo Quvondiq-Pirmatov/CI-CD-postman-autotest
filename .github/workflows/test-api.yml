@@ -17,5 +17,5 @@ jobs:
 
       - name: Run Postman collection
         run: |
-          newman run "5-lesson_for_postman.postman_collection.json" \
+          newman run "4-lesson_for_postman.postman_collection.json" \
           -r htmlextra --reporter-htmlextra-export "newman-report.html"
