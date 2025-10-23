@@ -1,0 +1,148 @@
+{
+	"info": {
+		"_postman_id": "745fb0eb-01fe-4f54-b876-cea478f9146d",
+		"name": "5-lesson for postman",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44094385",
+		"_collection_link": "https://bek-2315297.postman.co/workspace/my-first-postman-test~16f67cb3-767d-4647-8484-ca68fec4feb4/collection/44094385-745fb0eb-01fe-4f54-b876-cea478f9146d?action=share&source=collection_link&creator=44094385"
+	},
+	"item": [
+		{
+			"name": "full test response",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status 200 bo'lishi kerak\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Response json formatda keldi.\", function(){\r",
+							"    pm.response.to.be.json;\r",
+							"})\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.test(\"Title mavjud bo'lishi kerak\", function(){\r",
+							"    pm.expect(jsonData).to.have.property(\"title\");\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Title uzunlig 5 belgidan uzun bo'lishi kerak\", function(){\r",
+							"    pm.expect(jsonData.title.length).to.be.above(5);\r",
+							"})\r",
+							"\r",
+							"// Narx son bo'lishi\r",
+							"pm.test(\"price number bo'lishi kerak\", function(){\r",
+							"    pm.expect(jsonData.price).to.be.a(\"number\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response 1000 ms dan tez bo'lishi kerak\", function(){\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000)\r",
+							"})\r",
+							"\r",
+							"const schema = {\r",
+							"    type: \"object\",\r",
+							"    required: [\"id\", \"title\", \"price\", \"category\", \"rating\"],\r",
+							"    properties: {\r",
+							"        id: { type: \"number\"},\r",
+							"        title: {type: \"string\"},\r",
+							"        price: {type: \"number\"},\r",
+							"        category: {type: \"string\"},\r",
+							"        rating: {\r",
+							"            type: \"object\",\r",
+							"            required: [\"rate\", \"count\"],\r",
+							"            properties: {\r",
+							"                rate: {type: \"number\"},\r",
+							"                count: {type: \"number\"}\r",
+							"            }\r",
+							"        }\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"// Schema tekshirish\r",
+							"pm.test(\"Schema to'g'ri bo'lishi kerak\", function(){\r",
+							"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://fakestoreapi.com/products/1",
+					"protocol": "https",
+					"host": [
+						"fakestoreapi",
+						"com"
+					],
+					"path": [
+						"products",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Negative test",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// pm.test(\"Status 404 bo'lishi kerak\", function(){\r",
+							"//     pm.expect(pm.response.code).to.be.oneOf([404, 500]);\r",
+							"// })\r",
+							"\r",
+							"// pm.test(\"Response bo'sh bo'lmasligi kerak\", function(){\r",
+							"//     const body = pm.response.json();\r",
+							"//     pm.expect(Object.keys(body).length).to.be.above(0)\r",
+							"// })\r",
+							"\r",
+							"pm.test(\"Mahsulot mavjud yoki yo‘qligini tekshirish\", function () {\r",
+							"    const body = pm.response.json();\r",
+							"\r",
+							"    if (Object.keys(body).length === 0) {\r",
+							"        console.warn(\"⚠️ Mahsulot topilmadi, lekin 200 qaytdi\");\r",
+							"        pm.expect(pm.response.code).to.eql(200);\r",
+							"    } else {\r",
+							"        pm.test(\"Status 200 bo'lishi kerak\", function(){\r",
+							"            pm.response.to.have.status(200);\r",
+							"        });\r",
+							"        pm.test(\"ID mavjud bo'lishi kerak\", function(){\r",
+							"            pm.expect(body).to.have.property(\"id\");\r",
+							"        });\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://fakestoreapi.com/products/999999",
+					"protocol": "https",
+					"host": [
+						"fakestoreapi",
+						"com"
+					],
+					"path": [
+						"products",
+						"999999"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
